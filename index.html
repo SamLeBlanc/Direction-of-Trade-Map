@@ -1,145 +1,96 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
-<script src="assets/d3.v6.js"></script>
-<script src="assets/d3-legend.min.js"></script>
-<script src="scripts/links.js"></script>
-<script src="scripts/capitals.js"></script>
-<script src="scripts/countries.js"></script>
-<script src="scripts/hotkeys.js"></script>
-<script src="scripts/water.js"></script>
-<script src="scripts/zoom.js"></script>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@900&display=swap" rel="stylesheet">
+<head>
+  <!-- Assets -->
+  <script src="assets/d3.v6.js"></script>
+  <script src="assets/d3-legend.min.js"></script>
 
+  <!-- Scripts -->
+  <script src="index.js"></script>
+  <script src="scripts/hotkeys.js"></script>
+  <script src="scripts/zoom.js"></script>
+  <script src="scripts/links.js"></script>
+  <script src="scripts/capitals.js"></script>
+  <script src="scripts/countries.js"></script>
+  <script src="scripts/water.js"></script>
+  <script src="scripts/legend.js"></script>
 
-<div style="position:fixed; left: 10px; top: 600px;">
+  <!-- Styles -->
+  <link rel="stylesheet" href="styles/style.css">
+
+  <!-- Rubik font from Google -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@900&display=swap" rel="stylesheet">
+
+  <script src="assets/jquery-1.12.4.js"></script>
+  <script src="assets/jquery-ui.js"></script>
+
+  <link rel="stylesheet" href="assets/jquery-ui.css">
+</head>
+
+<body>
+<div class="settings">
   <div>
-    <input type="checkbox" id="direction-checkbox" name="Direct" value="Direct" onclick="if (lonks) lonks.remove();">
-    <label for="Direct">Import</label><br>
+    <select name="direction-select" id="direction-select" onchange="if (lonks) lonks.remove();">
+      <option value="import">Imports</option>
+      <option value="export">Exports</option>
+      <option value="net">Net Exports</option>
+    </select>
   </div>
   <div>
     <input type="checkbox" id="links-checkbox" name="Links" value="Links" onclick="draw()">
-    <label for="Links">Links</label><br>
-    <input id="links-number" type="number" value="5" style="width:50px">
+    <label for="Links">Links</label>
+    <input id="links-number" type="number" value="5" style="width:40px">
   </div>
   <div>
     <input type="checkbox" id="capitals-checkbox" name="Capitals" value="Capitals" onclick="draw()">
     <label for="Capitals">Capitals</label><br>
   </div>
 </div>
-<div style="font-family: 'Rubik', sans-serif;">
-  <div style="position:fixed; font-size:2em; font-weight:700;">
-    🤝 The Direction of Trade 🤝
+
+<div class="heading">
+  <div class="title">
+    <span id="title-country">Worldwide</span>
+    <span id="title-direction">Imports</span>
   </div>
-  <div style="position:fixed; left: 600px;">
-  <div style="font-size:2em; font-weight:700">
-    <span id="tit-direction">Exports to</span>
-    <span id="tit-country" style="color:hotpink; -webkit-text-stroke: 1px black;">Brazil</span>
-  </div>
-  <div id="info-1"></div>
-  <div id="info-2" style="color:lightblue">
-    <!-- Of those,
-    <span id="cB">Country B</span>
-    <span id="cD">received</span>
-    $<span id="cC">69</span>
-    <span id="cE">million</span>
-    (<span id="cP">million</span>%). -->
+  <div class="info">
+    <div id="info-1"></div>
+    <div id="info-2"></div>
   </div>
 </div>
+
+<div id="wrapper" style="position: fixed; top: 70px;">
+  <!-- SVG will live here -->
 </div>
-<div style="position:relative; height: 70px;"></div>
-<div id="wrap"></div>
-
-<style>
-
-body{
-  background: lightblue
-}
-
-.link{
-  stroke-linecap: round;
-  fill: transparent;
-  pointer-events: visibleStroke;
-  opacity: 0.5;
-  /* pointer-events: none; */
-}
-
-.country{
-  stroke: black;
-  stroke-width: 0.5;
-}
-
-</style>
 
 <script>
 
-const getDirection = () => document.getElementById("direction-checkbox").checked ? 'import' : 'export'
-const getLinks = () => document.getElementById("links-checkbox").checked
-const getCapitals = () => document.getElementById("capitals-checkbox").checked
-
+// Calculate SVG dimensions
 const width = window.innerWidth-40
-const height = window.innerHeight-100
+const height = width/2
 
-let currentZoom = 1
-
-// The svg
-const svg = d3.select("#wrap")
+// Define the SVG inside of the wrapper
+const svg = d3.select("#wrapper")
 .append("svg")
 .attr("width", width)
 .attr("height", height)
 .call(zoom);
 
-const g = svg.append("g");
+// Create two high-level groups, for the water and land components, respectively
+const ocean = svg.append("g");
+const land = svg.append("g");
 
-// Map and projection
+// Define the map projection and scale, then translate to proper position
 const projection = d3.geoEqualEarth()
-.scale(Math.min(width/ Math.PI, height/ Math.PI))
+.scale(Math.min(0.55*width/ Math.PI, 0.55*width/ Math.PI))
 .translate([width/2, height/2])
 
-// A path generator
+// Define path generator based on map projection
 const path = d3.geoPath().projection(projection)
 
 initializeHotkeys()
+loadData()
 
-let data = {};
-let links = [];
-let lonks;
-
-let tiles = {
-  'hover' : {
-    'previous' : '.',
-    'current' : '' },
-  'held' :  {
-    'previous' : '.',
-    'current' : ''}
-}
-
-
-
-Promise.all([
-  d3.json("data/countries.geojson"),
-  d3.json("data/water.geojson"),
-  d3.csv("data/capitals.csv"),
-  d3.csv("data/2020data.csv")
-]).then(
-  function (initialize) {
-    data = {
-      'countries' : initialize[0],
-      'water' : initialize[1],
-      'capitals' :  initialize[2],
-      '2020': initialize[3],
-    }
-    drawWater()
-    draw()
-  })
-
-  function draw(){
-    g.selectAll("*").remove();
-    drawAllCountries()
-    lonks = drawLinks()
-    if (getCapitals()) drawCapitals()
-  }
-
-</script>
+  </script>

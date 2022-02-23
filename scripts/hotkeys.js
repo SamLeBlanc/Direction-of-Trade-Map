@@ -1,15 +1,26 @@
-function initializeHotkeys(){
+// Functions to collect the user-selected map settings
+const getDirection = () => $('#direction-select').val()
+const getLinks = () => $('#links-checkbox').is(':checked')
+const getCapitals = () => $('#capitals-checkbox').is(':checked')
+
+// Creates the hotkey infrastructure that allows for fast changing of settings
+// After any of the hotkeys are pressed, the map is redrawn
+// E: toggle exports // I: toggle imports // N: toggle net exports
+// C: toggle capitals // L: toggle links
+const initializeHotkeys = () => {
   d3.select("body")
-    .on("keydown", function(e) {
+    .on("keydown", e => {
       if(e.keyCode === 67){ // C
-        document.getElementById("capitals-checkbox").checked = !document.getElementById("capitals-checkbox").checked;
+        $('#capitals-checkbox').prop('checked', !getCapitals());
       } else if (e.keyCode === 69){ // E
-        document.getElementById("direction-checkbox").checked = false;
+        $("#direction-select").val("export");
       } else if (e.keyCode === 73){ // I
-        document.getElementById("direction-checkbox").checked = true;
+        $("#direction-select").val("import");
+      } else if (e.keyCode === 78){ // N
+        $("#direction-select").val("net");
       } else if (e.keyCode === 76){ // L
-        document.getElementById("links-checkbox").checked = !document.getElementById("links-checkbox").checked;
+        $('#links-checkbox').prop('checked', !getLinks());
       }
-      draw()
+      draw() // redraw map after hotkey is pressed
   });
 }

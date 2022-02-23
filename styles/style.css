@@ -1,0 +1,51 @@
+.settings{
+  position:fixed;
+  left: 10px;
+  top: 10px;
+}
+
+.heading{
+  font-family: 'Rubik', sans-serif;
+  width: 800px;
+  margin: auto;
+  text-align: center;
+}
+
+.title{
+  font-size:2em;
+  font-weight:700;
+}
+
+#title-country{
+  color:hotpink;
+  -webkit-text-stroke: 1px black;
+}
+
+#wrapper{
+
+}
+
+.legend-label{
+  font-family: 'Rubik', sans-serif;
+}
+
+#info-2{
+  color:lightblue;
+}
+
+body{
+  background: lightblue
+}
+
+.link{
+  stroke-linecap: round;
+  fill: transparent;
+  pointer-events: visibleStroke;
+  opacity: 0.5;
+  /* pointer-events: none; */
+}
+
+.country{
+  stroke: black;
+  stroke-width: 0.5;
+}
