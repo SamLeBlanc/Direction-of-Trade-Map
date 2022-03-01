@@ -3,11 +3,18 @@ const getDirection = () => $('#direction-select').val()
 const getLinks = () => $('#links-checkbox').is(':checked')
 const getCapitals = () => $('#capitals-checkbox').is(':checked')
 
+const centerHeading = () => {
+  let innerWidth = window.innerWidth;
+  let headingWidth = parseInt($('.heading').css('width'));
+  $('.heading').css('left', 0.5 * (innerWidth - headingWidth))
+}
+
 // Creates the hotkey infrastructure that allows for fast changing of settings
 // After any of the hotkeys are pressed, the map is redrawn
 // E: toggle exports // I: toggle imports // N: toggle net exports
 // C: toggle capitals // L: toggle links
 const initializeHotkeys = () => {
+  centerHeading()
   d3.select("body")
     .on("keydown", e => {
       if(e.keyCode === 67){ // C

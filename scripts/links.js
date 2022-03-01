@@ -105,8 +105,8 @@ const updateSubtitle2 = i => {
 
   // Use direction to get proper past tense verb for subtitle
   let direction = getDirection();
-  if (direction == 'import') action = 'received'
-  if (direction == 'export') action = 'provided'
+  if (direction == 'import') action = 'provided'
+  if (direction == 'export') action = 'received'
   if (direction == 'net') action = 'accounted for'
 
   // Combine the above gathered info into a single string and set as subtitle

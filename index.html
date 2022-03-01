@@ -15,6 +15,8 @@
   <script src="scripts/countries.js"></script>
   <script src="scripts/water.js"></script>
   <script src="scripts/legend.js"></script>
+  <script src="scripts/dashboard.js"></script>
+
 
   <!-- Styles -->
   <link rel="stylesheet" href="styles/style.css">
@@ -32,21 +34,22 @@
 
 <body>
 <div class="settings">
-  <div>
-    <select name="direction-select" id="direction-select" onchange="if (lonks) lonks.remove();">
-      <option value="import">Imports</option>
-      <option value="export">Exports</option>
-      <option value="net">Net Exports</option>
+  <div style="font-family: 'Rubik', sans-serif; text-align:center;">Settings</div>
+  <div style="padding:2px 0px;">
+    <select name="direction-select" id="direction-select" onchange="if (lonks) lonks.remove();" style="width:137px;">
+      <option value="import">Imports (I)</option>
+      <option value="export">Exports (E)</option>
+      <option value="net">Net Exports (N)</option>
     </select>
   </div>
-  <div>
+  <div style="padding:2px 0px;">
     <input type="checkbox" id="links-checkbox" name="Links" value="Links" onclick="draw()">
-    <label for="Links">Links</label>
+    <label for="Links">Links (L)</label>
     <input id="links-number" type="number" value="5" style="width:40px">
   </div>
-  <div>
+  <div style="padding:2px 0px;">
     <input type="checkbox" id="capitals-checkbox" name="Capitals" value="Capitals" onclick="draw()">
-    <label for="Capitals">Capitals</label><br>
+    <label for="Capitals">Capitals (C)</label><br>
   </div>
 </div>
 
@@ -64,6 +67,9 @@
 <div id="wrapper" style="position: fixed; top: 70px;">
   <!-- SVG will live here -->
 </div>
+<div id="wrapper-2" style="position: fixed; top: 150px;">
+  <!-- SVG will live here -->
+</div>
 
 <script>
 
@@ -77,6 +83,18 @@ const svg = d3.select("#wrapper")
 .attr("width", width)
 .attr("height", height)
 .call(zoom);
+
+// const svg2 = d3.select("#wrapper-2")
+// .append("svg")
+// .attr("width", width)
+// .attr("height", height)
+// .call(zoom);
+//
+// svg2.append("rect")
+// .attr("id","test-rect")
+// .attr("width", "100%")
+// .attr("height", "100%")
+// .attr("fill", "pink");
 
 // Create two high-level groups, for the water and land components, respectively
 const ocean = svg.append("g");

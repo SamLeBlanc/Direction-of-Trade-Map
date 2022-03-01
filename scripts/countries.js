@@ -14,7 +14,7 @@ const scaleNum = val => {
 const updateTitle = i => {
   if (tiles.hover.current == "Ocean"){
     let titleDirection = $('#direction-select').find(":selected").text()
-    $('.title').html(`<span id="title-country">Worldwide</span> <span id="title-direction">${titleDirection}</span>`)
+    $('.title').html(`<span id="title-country">Worldwide</span> <span id="title-direction">${titleDirection.slice(0,-4)}</span>`)
   } else {
     let countryA = tiles.held.current ? tiles.held.current : i.properties.name;
     let direction = getDirection()
