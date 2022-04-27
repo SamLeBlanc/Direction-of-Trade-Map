@@ -11,11 +11,11 @@
   <script src="scripts/hotkeys.js"></script>
   <script src="scripts/zoom.js"></script>
   <script src="scripts/links.js"></script>
-  <script src="scripts/capitals.js"></script>
+  <!-- <script src="scripts/capitals.js"></script> -->
   <script src="scripts/countries.js"></script>
   <script src="scripts/water.js"></script>
   <script src="scripts/legend.js"></script>
-  <script src="scripts/dashboard.js"></script>
+  <!-- <script src="scripts/dashboard.js"></script> -->
 
 
   <!-- Styles -->
@@ -33,24 +33,34 @@
 </head>
 
 <body>
+
 <div class="settings">
-  <div style="font-family: 'Rubik', sans-serif; text-align:center;">Settings</div>
-  <div style="padding:2px 0px;">
-    <select name="direction-select" id="direction-select" onchange="if (lonks) lonks.remove();" style="width:137px;">
-      <option value="import">Imports (I)</option>
-      <option value="export">Exports (E)</option>
-      <option value="net">Net Exports (N)</option>
-    </select>
+  <div style="font-family: 'Rubik', sans-serif; font-size: 2em; color:hotpink; -webkit-text-stroke: 1px black;">Direction of Trade Map</div>
+  <div style="padding:10px"></div>
+  <div style="font-family: 'Rubik', sans-serif;">Settings</div>
+  <div>
+    <div style="padding:1px 3px;">
+      <select name="direction-select" id="direction-select" onchange="if (lonks) lonks.remove();" style="width:137px;">
+        <option value="import">Imports (I)</option>
+        <option value="export">Exports (E)</option>
+        <option value="net">Net Exports (N)</option>
+      </select>
+    </div>
+    <div style="padding:1px 3px;">
+      <input type="checkbox" id="links-checkbox" name="Links" value="Links" onclick="draw()">
+      <label for="Links">Links (L)</label>
+      <input id="links-number" type="number" value="5" style="width:40px">
+    </div>
+    <!-- <div style="padding:1px 3px;">
+      <input type="checkbox" id="capitals-checkbox" name="Capitals" value="Capitals" onclick="draw()">
+      <label for="Capitals">Capitals (C)</label><br>
+    </div> -->
   </div>
-  <div style="padding:2px 0px;">
-    <input type="checkbox" id="links-checkbox" name="Links" value="Links" onclick="draw()">
-    <label for="Links">Links (L)</label>
-    <input id="links-number" type="number" value="5" style="width:40px">
+  <div>
+     <button id="dash-map-button" type="button" onclick="alert()">Switch to Dashboard</button>
   </div>
-  <div style="padding:2px 0px;">
-    <input type="checkbox" id="capitals-checkbox" name="Capitals" value="Capitals" onclick="draw()">
-    <label for="Capitals">Capitals (C)</label><br>
-  </div>
+  <br>
+  <div style="font-family: 'Rubik', sans-serif; ">Source: IMF</div>
 </div>
 
 <div class="heading">
@@ -67,15 +77,14 @@
 <div id="wrapper" style="position: fixed; top: 70px;">
   <!-- SVG will live here -->
 </div>
-<div id="wrapper-2" style="position: fixed; top: 150px;">
-  <!-- SVG will live here -->
-</div>
+<!-- <div id="wrapper-2" style="position: fixed; top: 150px;">
+</div> -->
 
 <script>
 
 // Calculate SVG dimensions
-const width = window.innerWidth-40
-const height = width/2
+const width = window.innerWidth-20
+const height = Math.min(window.innerHeight - 65, width/2)
 
 // Define the SVG inside of the wrapper
 const svg = d3.select("#wrapper")
@@ -84,17 +93,21 @@ const svg = d3.select("#wrapper")
 .attr("height", height)
 .call(zoom);
 
-// const svg2 = d3.select("#wrapper-2")
-// .append("svg")
-// .attr("width", width)
-// .attr("height", height)
-// .call(zoom);
-//
-// svg2.append("rect")
-// .attr("id","test-rect")
-// .attr("width", "100%")
-// .attr("height", "100%")
-// .attr("fill", "pink");
+$('#wrapper-2').css({'top': height})
+
+const svg2 = d3.select("#wrapper-2")
+.append("svg")
+.attr("width", width)
+.attr("height", height)
+.call(zoom);
+
+svg2.append("rect")
+.attr("id","test-rect")
+.attr("width", "100%")
+.attr("height", "100%")
+.style("fill", "transparent")
+.style("stroke", "black")
+.style("stroke-width", 2)
 
 // Create two high-level groups, for the water and land components, respectively
 const ocean = svg.append("g");

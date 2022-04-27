@@ -27,8 +27,9 @@ const loadData = () => {
 
 function draw(){
   land.selectAll("*").remove();
+  updateTitle()
   drawAllCountries()
   lonks = drawLinks()
-  if (getCapitals()) drawCapitals()
+  // if (getCapitals()) drawCapitals()
   drawLegend()
 }

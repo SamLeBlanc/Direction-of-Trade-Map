@@ -1,7 +1,7 @@
 function drawLegend() {
 
 let keys = [0, 10, 100, 1000, 10000, 100000, 1000000];
-if (getDirection() == 'net') keys = [-1000000,-100000,-10000,-1000,-1,0,1,1000,10000,100000,1000000];
+if (getDirection() == 'net') keys = [-1000000,-100000,-10000,-1000,-100,0,100,1000,10000,100000,1000000];
 
 try { legend.remove() } catch {}
 
@@ -14,7 +14,7 @@ legend.append("g")
   .data(keys)
   .enter()
   .append("circle")
-    .attr("cx", 10)
+    .attr("cx", 15)
     .attr("cy", function(d,i){ return 200 + i*20}) // 100 is where the first dot appears. 25 is the distance between dots
     .attr("r", 7)
 		.attr("stroke","black")
@@ -28,7 +28,7 @@ legend.append("g")
   .enter()
   .append("text")
     .attr("class","legend-label")
-    .attr("x", 25)
+    .attr("x", 30)
     .attr("y", function(d,i){ return 205 + i*20}) // 100 is where the first dot appears. 25 is the distance between dots
     .style("fill", function(d){ return getColor(d)})
     .text(function(d){ return format(1000000*d).replace(/G/,"B")})

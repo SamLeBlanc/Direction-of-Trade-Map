@@ -11,8 +11,8 @@ const scaleNum = val => {
   return Math.round(val)
 }
 
-const updateTitle = i => {
-  if (tiles.hover.current == "Ocean"){
+const updateTitle = (i=null) => {
+  if (i == null || tiles.hover.current == "Ocean"){
     let titleDirection = $('#direction-select').find(":selected").text()
     $('.title').html(`<span id="title-country">Worldwide</span> <span id="title-direction">${titleDirection.slice(0,-4)}</span>`)
   } else {
@@ -85,7 +85,7 @@ const colorImportExport = x => {
 
 const colorNetExports = x => {
   if (x == 0) return "#ddd"
-  const breaks = [-1000000,-100000,-10000,-1000,-1,0,1,1000,10000,100000,1000000];
+  const breaks = [-1000000,-100000,-10000,-1000,-100,0,100,1000,10000,100000,1000000];
   const colors = ["#9e160e","#d73027","#f46d43","#fdae61","#fee08b","#ddd","#d9ef8b","#a6d96a","#66bd63","#1a9850","#0a6b33"]
   let count = 0;
   breaks.forEach(n => { if(n<x) count++ });
@@ -170,7 +170,7 @@ const drawAllCountries = () => {
         removeAllLinks()
         lonks = drawLinks()
       } else {
-        document.getElementById('info-2').style.color = 'lightblue'
+        $('#info-2').empty();
         d3.select(this)
           .style('fill', 'hotpink');
       }

@@ -76,7 +76,7 @@ function drawLinks(){
        }
     })
     .on('mouseout', function (d, i) {
-      $('#info-2').css('color','lightblue')
+      $('#info-2').empty();
       d3.select(this).style('stroke', getLinkColor());
     });
   return lonks
@@ -110,8 +110,8 @@ const updateSubtitle2 = i => {
   if (direction == 'net') action = 'accounted for'
 
   // Combine the above gathered info into a single string and set as subtitle
-  let subtitle_string = `Of which, ${countryB} ${action} $${scaleNum(value)} ${scaleMBT(value)} (${percent}%).`
-  $('#info-2').text(subtitle_string)
+  $('#info-2').html(`Of which, <span class='info-2-countryB'>${countryB}</span> ${action} $${scaleNum(value)} ${scaleMBT(value)} (${percent}%).`)
+  $('.info-2-countryB').css({'color': 'hotpink', '-webkit-text-stroke': '0.8px black'})
 }
 
 // Determine the path of the link between countryA and countryB

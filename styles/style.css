@@ -2,6 +2,8 @@
   position:fixed;
   left: 10px;
   top: 10px;
+  z-index:3;
+  width: 250px;
 }
 
 .heading{
@@ -33,6 +35,11 @@
 
 #info-2{
   color:lightblue;
+}
+
+#info-2-countryB{
+ color: hotpink;
+ -webkit-text-stroke: 1px black;
 }
 
 body{
