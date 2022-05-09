@@ -1,6 +1,8 @@
+// Functions pertaining to the links (lines) between countries (press L)
+
 // Creates an array with the data for creating links between countries
 // Each link contains the names of the linked countries, the source and target coordinates, and
-//    the link value (the amount of trade in millions) and weight (calculated width of the link)
+// the link value (the amount of trade in millions) and weight (calculated width of the link)
 // Can be called with only countryA or can be called with both countryA and countryB
 // If only countryA, it will return links between countryA and all other countries (up to ~200)
 // If both countryA and countryB, then only one link (between the two coutnries) will be returned
@@ -28,6 +30,7 @@ const createLinkArray = (countryA, countryB = "") => {
   return links
 }
 
+// Update the link arrays to hold the new links, and redraw the map.
 const updateLinks = i => {
   if (tiles.held.current) {
     // Get single link between held country and hovered country
@@ -57,6 +60,7 @@ const removeAllLinks = () => d3.selectAll('.link').remove();
 // Returns boolean based on whether links 'should' be displayed currently
 const displayLinks = () => (getLinks() && tiles.hover.current != "Ocean");
 
+// Draw the links on the map if the option is selected.
 function drawLinks(){
   if (!displayLinks()) return land.append("g")
   removeAllLinks()

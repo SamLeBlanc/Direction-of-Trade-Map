@@ -1,14 +1,11 @@
-// Functions to collect the user-selected map settings
-const getDirection = () => $('#direction-select').val()
-const getLinks = () => $('#links-checkbox').is(':checked')
-// const getCapitals = () => $('#capitals-checkbox').is(':checked')
+// Functions to setup the hotkeys and center some headings/wrappers
 
+// Positioning functions to center some divs
 const centerHeading = () => {
   let innerWidth = window.innerWidth;
   let headingWidth = parseInt($('.heading').css('width'));
   $('.heading').css('left', 0.5 * (innerWidth - headingWidth))
 }
-
 const verticalCenterMap = () => {
   let initialTop = parseInt($('#wrapper').css('top'))
   let innerHeight = window.innerHeight
@@ -18,7 +15,6 @@ const verticalCenterMap = () => {
   $('.settings').css({'top': Math.max(5,newTop-40)})
   $('.heading').css({'top': Math.max(5,newTop-35)})
 }
-
 const horizontalCenterWrappers = () => {
   ["#wrapper","#wrapper-2"].forEach(div => {
     let initialLeft = parseInt($(div).css('left'))
@@ -29,6 +25,10 @@ const horizontalCenterWrappers = () => {
   })
 }
 
+// Functions to collect the user-selected map settings
+const getDirection = () => $('#direction-select').val()
+const getLinks = () => $('#links-checkbox').is(':checked')
+
 // Creates the hotkey infrastructure that allows for fast changing of settings
 // After any of the hotkeys are pressed, the map is redrawn
 // E: toggle exports // I: toggle imports // N: toggle net exports
@@ -37,12 +37,8 @@ const initializeHotkeys = () => {
   horizontalCenterWrappers()
   verticalCenterMap()
   centerHeading()
-  // initialzeDashboard()
   d3.select("body")
     .on("keydown", e => {
-      // if(e.keyCode === 67){ // C
-      //   $('#capitals-checkbox').prop('checked', !getCapitals());
-      // } else
       if (e.keyCode === 69){ // E
         $("#direction-select").val("export");
       } else if (e.keyCode === 73){ // I
@@ -52,6 +48,6 @@ const initializeHotkeys = () => {
       } else if (e.keyCode === 76){ // L
         $('#links-checkbox').prop('checked', !getLinks());
       }
-      draw() // redraw map after hotkey is pressed
+      draw()
   });
 }

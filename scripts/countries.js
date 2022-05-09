@@ -1,9 +1,13 @@
+// Scale number ending based on the size in million, billion, trillion
+// Goes with scaleNum()
 const scaleMBT = val => {
   // note: values are all in millions as default
   if (Math.abs(val) > 1000000) return "trillion"
   return (Math.abs(val) > 1000) ? "billion" : "million"
 }
 
+// Scale the number to fit with the million, billion, trillions ending
+// Goes with scaleMBT()
 const scaleNum = val => {
   if (Math.abs(val) > 1000000) val = val/1000000
   if (Math.abs(val) > 1000) val = val/1000
@@ -30,7 +34,8 @@ const updateSubtitle1 = i => {
   if (tiles.hover.current != "Ocean"){
     let countryA = tiles.held.current ? tiles.held.current : i.properties.name;
     let countrySum = getSingleCountrySum(countryA, getDirection())
-    string = `In 2020, ${countryA} had $${scaleNum(countrySum)} ${scaleMBT(countrySum)} worth of ${getDirection()}s.`
+    let direc = getDirection() == 'net' ? 'net export' : getDirection()
+    string = `In 2020, ${countryA} had $${scaleNum(countrySum)} ${scaleMBT(countrySum)} worth of ${direc}s.`
   }
   document.getElementById("info-1").textContent = string
 }
@@ -111,9 +116,6 @@ const fillCountrySingle = d => {
 }
 
 const fillNationalSum = d => getColor(getSingleCountrySum(d.properties.name, getDirection()))
-
-
-
 
 const redrawSingleCountry = countryName => {
   const onHeldClick = (d,i) => {

@@ -1,3 +1,5 @@
+// Functions pertaining to the water tile
+
 // Create the SVG oceanic background that soft resets the map when hovered over
 // SVG ocean is a transparent rectangle behind the maps with SVG height/width
 const drawWater = () => {

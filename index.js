@@ -30,6 +30,5 @@ function draw(){
   updateTitle()
   drawAllCountries()
   lonks = drawLinks()
-  // if (getCapitals()) drawCapitals()
   drawLegend()
 }
